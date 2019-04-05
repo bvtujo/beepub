@@ -18,7 +18,7 @@ from ebooklib import epub
 
 
 HTTP_HEADER_ = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
-TAG_URL_ = r"https://blog.beeminder.com/tag/bee=all/"
+TAG_URL_ = r"https://blog.beeminder.com/tag/bee-all/"
 UUID = str(uuid.uuid4())
 
 def pickle_file(filename, object):
@@ -54,7 +54,6 @@ def read_html(fname):
 def parse_entry(html_doc, url):
     
     soup = BeautifulSoup(html_doc)
-    print(html_doc[1:100])
     post = soup.find("div", class_="post")
     title = post.find("h1")
     title_str = str(title.text)
@@ -87,6 +86,7 @@ def process_entry(entry_url):
 
 def get_links(toc_url, ids, links):
     print("Down one level!")
+    print("Sending GET request to {}".format(toc_url))
     r = requests.get(toc_url, headers=HTTP_HEADER_)
     doc = r.content
     soup = BeautifulSoup(doc)
@@ -110,7 +110,7 @@ def make_book(BookName, author, chapters, uuid, filename):
     book.set_title(BookName)
     book.set_language("en")
     book.add_author(author)
-    
+
     for a in chapters:
         book.add_item(a)
 
