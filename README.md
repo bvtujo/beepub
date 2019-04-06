@@ -1,6 +1,7 @@
 # beepub
 
 A simple quick-and-dirty scrape of the bee-all tag at https://blog.beeminder.com/bee-all
+Outputs an epub consisting of all the blog posts on that tag. 
 
 Usage: 
 * Change desired user-specified parameters. 
