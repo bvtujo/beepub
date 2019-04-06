@@ -1,12 +1,12 @@
 import pickle
 import time
-import datetime
+import requests
+import uuid
+import os
 
 from bs4 import BeautifulSoup
 from lxml import html
-from urllib import request
-import requests
-import uuid
+
 
 # shim to resolve unicode problems in ebooklib imports
 # taken from https://stackoverflow.com/questions/33433223/reading-images-into-ebooklib-epub-in-python-3-4
@@ -18,7 +18,6 @@ from ebooklib import epub
 
 
 HTTP_HEADER_ = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
-TAG_URL_ = r"https://blog.beeminder.com/tag/bee-all/"
 UUID = str(uuid.uuid4())
 
 def pickle_file(filename, object):
@@ -130,9 +129,13 @@ def make_book(BookName, author, chapters, uuid, filename):
 
 if __name__ == "__main__":
 
-    ids, links = get_links(TAG_URL_, [],[])
-    pickle_file("toc.dat", {"ids": ids, "links": links})
-
+    TAG_URL_ = r"https://blog.beeminder.com/tag/bee-all/"
+    AUTHOR_ = "Daniel Reeves, Bethany Soule, et al."
+    TITLE_ = "Beeminder Blog"
+    FNAME_ = "Beeminder Blog.epub"
+    if not os.path.exists("toc.dat"):
+        ids, links = get_links(TAG_URL_, [],[])
+        pickle_file("toc.dat", {"ids": ids, "links": links})
 
     toc = unpickle("toc.dat")
 
@@ -142,10 +145,10 @@ if __name__ == "__main__":
         print(i)
     chapters = [process_entry(ch) for ch in toc['links']]
 
-    make_book("Beeminder Blog", 
-        "Daniel Reeves, Bethany Soule, et al.", 
+    make_book(TITLE_, 
+        AUTHOR_, 
         chapters, 
         UUID, 
-        "Beeminder Blog.epub")
+        FNAME_)
 
 
