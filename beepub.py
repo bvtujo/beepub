@@ -113,6 +113,17 @@ def make_book(BookName, author, chapters, uuid, filename):
     for a in chapters:
         book.add_item(a)
 
+    pic = open("img/kooper.png", 'rb').read()
+    eIm = epub.EpubImage()
+    eIm.id="kooper.png"
+    eIm.file_name = "img/kooper.png"
+    eIm.media_type='image/png'
+    eIm.content=pic
+    book.add_item(eIm)
+
+    imChap = epub.EpubHtml(title="imagechapter", file_name = "imchap.xhtml", lang='en')
+    imChap.set_content("<body><h1>header</h2><img src='img/kooper.png'></body>")
+    chapters.append(imChap)
     style = 'body { font-family: Times, Times New Roman, serif; } h1 {font-size: 16; font-style: bold;}'
     nav_css = epub.EpubItem(uid="style_nav",
                             file_name="style/nav.css",
@@ -129,26 +140,25 @@ def make_book(BookName, author, chapters, uuid, filename):
 
 if __name__ == "__main__":
 
-    TAG_URL_ = r"https://blog.beeminder.com/tag/bee-all/"
+    TAG_URL_ = r"https://blog.beeminder.com/tag/rationality/"
     AUTHOR_ = "Daniel Reeves, Bethany Soule, et al."
-    TITLE_ = "Beeminder Blog"
-    FNAME_ = "Beeminder Blog.epub"
-    if not os.path.exists("toc.dat"):
+    TITLE_ = "Rationality According to Beeminder"
+    FNAME_ = "beem-rat.epub"
+    if not os.path.exists("toc_rationality.dat"):
         ids, links = get_links(TAG_URL_, [],[])
-        pickle_file("toc.dat", {"ids": ids, "links": links})
+        pickle_file("toc_rationality.dat", {"ids": ids, "links": links})
 
-    toc = unpickle("toc.dat")
+    toc = unpickle("toc_rationality.dat")
 
 
     toc['links'].reverse()
-    for i in toc['links'][-6:]:
+    for i in toc['links']:
         print(i)
-    chapters = [process_entry(ch) for ch in toc['links']]
+    chapters = [process_entry(ch) for ch in toc['links'][:2]]
+    
 
     make_book(TITLE_, 
         AUTHOR_, 
         chapters, 
         UUID, 
         FNAME_)
-
-
