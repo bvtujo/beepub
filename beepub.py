@@ -129,15 +129,16 @@ def make_book(BookName, author, chapters, uuid, filename):
 
 if __name__ == "__main__":
 
-    TAG_URL_ = r"https://blog.beeminder.com/tag/bee-all/"
+    TAG = 'rationality'
+    TAG_URL_ = r"https://blog.beeminder.com/tag/{}/".format(TAG)
     AUTHOR_ = "Daniel Reeves, Bethany Soule, et al."
-    TITLE_ = "Beeminder Blog"
-    FNAME_ = "Beeminder Blog.epub"
-    if not os.path.exists("toc.dat"):
+    TITLE_ = "Rationality: From Akrasia to Beeminder"
+    FNAME_ = "BeeminderRationality.epub"
+    if not os.path.exists("toc_{}.dat".format(TAG)):
         ids, links = get_links(TAG_URL_, [],[])
-        pickle_file("toc.dat", {"ids": ids, "links": links})
+        pickle_file("toc_{}.dat".format(TAG), {"ids": ids, "links": links})
 
-    toc = unpickle("toc.dat")
+    toc = unpickle("toc_{}.dat".format(TAG))
 
 
     toc['links'].reverse()
